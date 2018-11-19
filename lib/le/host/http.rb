@@ -16,6 +16,7 @@ module Le
       SHUTDOWN_COMMAND = "DIE!DIE!"  # magic command string for async worker to shutdown
       SHUTDOWN_MAX_WAIT = 10         # max seconds to wait for queue to clear on shutdown
       SHUTDOWN_WAIT_STEP = 0.2       # sleep duration (seconds) while waiting to shutdown
+      SSL_METHODS = [:SSLv23, :SSLv23_client, :SSLv23_server, :SSLv2, :SSLv2_client, :SSLv2_server, :SSLv3, :SSLv3_client, :SSLv3_server, :TLSv1, :TLSv1_client, :TLSv1_server, :TLSv1_1, :TLSv1_1_client, :TLSv1_1_server, :TLSv1_2, :TLSv1_2_client, :TLSv1_2_server]
 
 
       include Le::Host::InstanceMethods
@@ -200,7 +201,7 @@ module Le
 	    ssl_context.cert_store = cert_store
 
             ssl_version_candidates = [:TLSv1_2, :TLSv1_1, :TLSv1]
-            ssl_version_candidates = ssl_version_candidates.select { |version| OpenSSL::SSL::SSLContext::METHODS.include? version }
+            ssl_version_candidates = ssl_version_candidates.select { |version| SSL_METHODS.include? version }
             if ssl_version_candidates.empty?
                 raise "Could not find suitable TLS version"
             end
